@@ -2,8 +2,8 @@
 
 {% block content %}
 {% if current_user.is_anonymous %}
-<h1>Привет! Добро пожаловать на мой сайт!</h1>
+<h1 class="text-center">Привет! Добро пожаловать на мой сайт!</h1>
 {% else %}
-<h1>Привет, {{ current_user.username}}! Добро пожаловать на мой сайт!</h1>
+<h1 class="text-center">Привет, {{ current_user.username}}! Добро пожаловать на мой сайт!</h1>
 {% endif %}
 {% endblock %}
