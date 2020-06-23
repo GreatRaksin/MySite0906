@@ -1,8 +1,8 @@
-from flask import render_template, flash, redirect, url_for
-from flask_login import current_user, login_user, logout_user
+from flask import render_template, flash, redirect, url_for, request
+from flask_login import current_user, login_user, logout_user, login_required
 
 from habrClone import App, db
-from habrClone.forms import LoginForm, RegistrationForm
+from habrClone.forms import LoginForm, RegistrationForm, AccountUpdateForm
 from habrClone.models import User
 
 
@@ -59,3 +59,21 @@ def register():
 
         return redirect(url_for('login'))
     return render_template('register.html', form=form, title='Регистрация')
+
+
+@App.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    form = AccountUpdateForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Обновлено!')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+
+    avatar = url_for('static', filename='img/avatars/' + current_user.avatar)
+    return render_template('account.html', avatar=avatar, form=form)
