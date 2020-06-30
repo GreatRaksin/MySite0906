@@ -1,3 +1,6 @@
+import os
+
+from PIL import Image
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 
@@ -26,7 +29,7 @@ def login():
         '''если мы его там не нашли (None) или пароль невеный'''
         if user is None or not user.check_password(form.password.data):
             '''даем ему сообщение и возвращаем на страницу с логином'''
-            flash('Неправильное имя пользователя и/или пароль!')
+            flash('Неправильное имя пользователя и/или пароль!', 'danger')
             return redirect(url_for('login'))
 
         '''если все ок, выполняем вход (login_user) и перенаправляем на главную'''
@@ -55,10 +58,24 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        flash('Вы успешно зарегистрировались!')
+        flash('Вы успешно зарегистрировались!', 'success')
 
         return redirect(url_for('login'))
     return render_template('register.html', form=form, title='Регистрация')
+
+
+def save_picture(form_picture):
+    f_name, f_ext = os.path.splitext(form_picture.filename)
+    pic_fn = f_name + f_ext
+    pic_path = os.path.join(App.root_path, 'static/img/avatars',
+                            pic_fn)  # MySite0906/habrClone/, static/img/avatar, avatar.jpg
+
+    resize_image = (125, 125)
+    image = Image.open(form_picture)
+    image.thumbnail(resize_image)
+
+    image.save(pic_path)
+    return pic_fn
 
 
 @App.route('/account', methods=['GET', 'POST'])
@@ -66,10 +83,14 @@ def register():
 def account():
     form = AccountUpdateForm()
     if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.avatar = picture_file
+
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
-        flash('Обновлено!')
+        flash('Обновлено!', 'info')
         return redirect(url_for('account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
