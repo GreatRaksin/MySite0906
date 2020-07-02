@@ -6,8 +6,7 @@
     <section class="content-section">
         {% if current_user.is_anonymous %}
         <h1 class="text-center">Новый пользователь? <span class="badge badge-secondary"><a
-                href="{{ url_for('register') }}"
-                class="dark">Регистрация</a></span>
+                href="{{ url_for('register') }}" class="dark">Регистрация</a></span>
         </h1>
         {% endif %}
         <form action="" method="post" novalidate class="form login-form">

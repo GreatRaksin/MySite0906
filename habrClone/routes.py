@@ -5,8 +5,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 
 from habrClone import App, db
-from habrClone.forms import LoginForm, RegistrationForm, AccountUpdateForm
-from habrClone.models import User
+from habrClone.forms import LoginForm, RegistrationForm, AccountUpdateForm, NewsForm
+from habrClone.models import User, New
 
 
 @App.route('/')
@@ -97,9 +97,25 @@ def account():
         form.email.data = current_user.email
 
     avatar = url_for('static', filename='img/avatars/' + current_user.avatar)
-    return render_template('account.html', avatar=avatar, form=form)
+    news = New.query.filter_by(user_id=current_user.id)
+    return render_template('account.html', avatar=avatar, form=form, news=news)
 
 
 @App.route('/about')
 def about_page():
     return render_template('about.html', title='О нас')
+
+
+@App.route('/blog', methods=['GET', 'POST'])
+def news():
+    form = NewsForm()
+    if form.validate_on_submit():
+        new = New(article=current_user.username, body=form.body.data, user_id=current_user.id)
+        db.session.add(new)
+        db.session.commit()
+
+        flash('Новость опубликована!', 'success')
+        return redirect(url_for('news'))
+
+    news = New.query.all()
+    return render_template('blog.html', title='Блог', form=form, news=news)

@@ -4,9 +4,10 @@
 
 <section class="content-section">
 
+    {% if current_user.is_authenticated %}
+
     <h1>Привет, {{ current_user.username }}! Напиши что-нибудь:</h1>
 
-    {% if current_user.is_authenticated %}
     <form method="post">
         {{ form.hidden_tag() }}
         <div class="form-group">
@@ -20,11 +21,30 @@
         {{ form.submit(class='btn btn-info') }}
     </form>
     {% else %}
-    <h1 class="text-center">Писать новости можно только после регистрации! <span class="badge badge-secondary"><a
+    <h1 class="text-center">Писать новости можно только после регистрации/входа! <span class="badge badge-secondary"><a
             href="{{ url_for('register') }}"
-            class="dark">Регистрация</a></span>
+            class="dark">Регистрация</a></span> <span class="badge badge-success"><a
+            href="{{ url_for('login') }}"
+            class="dark">Вход</a></span>
     </h1>
+    {% endif %}
 
+    <hr>
+
+    {% for new in news %}
+
+    <div class="card new">
+        <div class="card-header bg-secondary">
+            {{ new.author.username }}
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>{{ new.body }}</p>
+            </blockquote>
+        </div>
+    </div>
+
+    {% endfor %}
 
 </section>
 
