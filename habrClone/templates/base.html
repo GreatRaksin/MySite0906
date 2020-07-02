@@ -13,6 +13,9 @@
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
+    <!-- Подключение иконок -->
+    <script src="https://kit.fontawesome.com/07f360a796.js" crossorigin="anonymous"></script>
+
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Cabin:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:900" rel="stylesheet">
@@ -34,7 +37,7 @@
 
     <div class="container">
 
-        <a class="navbar-brand" href="{{ url_for('index') }}">MySite</a>
+        <a class="navbar-brand" href="{{ url_for('index') }}"><i class="fab fa-apple"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -53,17 +56,17 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         {% if current_user.is_anonymous %}
-                        <a class="nav-link" href="{{ url_for('login') }}">Войти</a>
+                        <a class="nav-link" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i></a>
                         {% else %}
-                        <a class="nav-link" href="{{ url_for('logout') }}">Выйти</a>
+                        <a class="nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i></a>
                         {% endif %}
                     </li>
 
                     <li class="nav-item active">
                         {% if current_user.is_anonymous %}
-                        <a class="nav-link" href="{{ url_for('register') }}">Регистрация</a>
+                        <a class="nav-link" href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i></a>
                         {% else %}
-                        <a class="nav-link" href="{{ url_for('account') }}">Профиль</a>
+                        <a class="nav-link" href="{{ url_for('account') }}"><i class="fas fa-user-circle"></i></a>
                         {% endif %}
                     </li>
                 </ul>

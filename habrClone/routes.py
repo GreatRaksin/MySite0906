@@ -98,3 +98,8 @@ def account():
 
     avatar = url_for('static', filename='img/avatars/' + current_user.avatar)
     return render_template('account.html', avatar=avatar, form=form)
+
+
+@App.route('/about')
+def about_page():
+    return render_template('about.html', title='О нас')
