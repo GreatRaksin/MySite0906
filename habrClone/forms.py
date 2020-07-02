@@ -1,8 +1,8 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, ValidationError, EqualTo
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, ValidationError, EqualTo, Length
 
 from habrClone.models import User
 
@@ -49,3 +49,8 @@ class AccountUpdateForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user is not None:
                 raise ValidationError('Используйте другой Email!')
+
+
+class NewsForm(FlaskForm):
+    body = TextAreaField('Текст новости:', validators=[DataRequired(), Length(min=1, max=200)])
+    submit = SubmitField('Отправить')
