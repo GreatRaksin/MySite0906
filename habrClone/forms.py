@@ -54,3 +54,9 @@ class AccountUpdateForm(FlaskForm):
 class NewsForm(FlaskForm):
     body = TextAreaField('Текст новости:', validators=[DataRequired(), Length(min=1, max=200)])
     submit = SubmitField('Отправить')
+
+
+class ZvonokForm(FlaskForm):
+    phone = StringField('Ваш номер телефона:', validators=[DataRequired(), Length(9, 11)])
+    body = TextAreaField('Текст новости:', validators=[DataRequired(), Length(min=1, max=200)])
+    submit = SubmitField('Отправить')

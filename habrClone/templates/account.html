@@ -5,8 +5,14 @@
     <div class="media">
         <img class="rounded-circle account-img" src="{{ avatar }}">
         <div class="media-body">
+
+            {% if current_user.id == 9 %}
+            <h2 class="account-heading">Демид Раксин</h2>
+            {% else %}
             <h2 class="account-heading">{{ current_user.username }}</h2>
+            {% endif %}
             <p class="text-secondary">{{ current_user.email }}</p>
+
         </div>
     </div>
     <!-- FORM HERE -->
@@ -51,6 +57,26 @@
             </div>
         </div>
     </form>
+
+    <hr>
+
+
+    {% for zvonok in zvonki %}
+
+    <div class="card new">
+        <div class="card-header bg-warning">
+            <b>Обращение от:</b> {{ zvonok.author.username }}
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p><b>Текст обращения:</b> {{ zvonok.text }}</p>
+                <p><b>Телефон для связи:</b> {{ zvonok.phone }}</p>
+            </blockquote>
+        </div>
+    </div>
+
+    {% endfor %}
+
 
     <hr>
 

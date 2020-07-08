@@ -5,14 +5,22 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 
 from habrClone import App, db
-from habrClone.forms import LoginForm, RegistrationForm, AccountUpdateForm, NewsForm
-from habrClone.models import User, New
+from habrClone.forms import LoginForm, RegistrationForm, AccountUpdateForm, NewsForm, ZvonokForm
+from habrClone.models import User, New, Zvonok
 
 
-@App.route('/')
-@App.route('/index')
+@App.route('/', methods=['GET', 'POST'])
+@App.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    form = ZvonokForm()
+    if form.validate_on_submit():
+        zvonok = Zvonok(text=form.body.data, phone=form.phone.data, user_username=current_user.username)
+        db.session.add(zvonok)
+        db.session.commit()
+
+        flash('Обращение отправлено!', 'success')
+        return redirect(url_for('index'))
+    return render_template('index.html', form=form)
 
 
 @App.route('/sign_in', methods=['GET', 'POST'])
@@ -98,7 +106,9 @@ def account():
 
     avatar = url_for('static', filename='img/avatars/' + current_user.avatar)
     news = New.query.filter_by(user_id=current_user.id)
-    return render_template('account.html', avatar=avatar, form=form, news=news)
+
+    zvonki = Zvonok.query.all()
+    return render_template('account.html', avatar=avatar, form=form, news=news, zvonki=zvonki)
 
 
 @App.route('/about')

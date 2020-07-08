@@ -9,5 +9,34 @@
     <h1 class="text-center">Привет, {{ current_user.username}}! Добро пожаловать на мой сайт!</h1>
     {% endif %}
 
+    <hr>
+
+    {% if current_user.is_authenticated %}
+    <h3 class="text-center">Задайте вопрос или внесите предложение администратору сайта.</h3>
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+
+            {{ form.phone.label }}
+            {{ form.phone(class='form-control') }}
+            <small class="form-text text-muted">В формате +375 хх ххх хх хх или 29 ххх хх хх.</small>
+
+        </div>
+        <div class="form-group">
+
+            {{ form.body.label }}
+            {{ form.body(class='form-control', cols=32, rows=6) }}
+
+            {% for error in form.body.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {{ form.submit(class='btn btn-info') }}
+    </form>
+    {% else %}
+    <p>blah-blah</p>
+    {% endif %}
+
 </section>
 {% endblock %}
